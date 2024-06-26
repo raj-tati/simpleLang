@@ -15,13 +15,8 @@ sub lhsAndRhsConvert {
     my $rhs = $sourceLines[1];
     $lhs =~ s/^\s+//;
     $rhs =~ s/\s+$//;
-
-    print ":::::\n";
-    print $lhs;
-    print $rhs;
-    print ":::::\n";
-    return 2;
     
+    return $lhs . "=" . $rhs;
 }
 
 sub convertLang {
