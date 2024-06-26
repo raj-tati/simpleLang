@@ -8,6 +8,22 @@ sub convertLineToFunctionDeclaration($sourceLine) {
     return $newstring;
 }
 
+sub lhsAndRhsConvert {
+    my ($sourceLine) = @_;
+    my @sourceLines = split("=", $sourceLine);
+    my $lhs = $sourceLines[0];
+    my $rhs = $sourceLines[1];
+    $lhs =~ s/^\s+//;
+    $rhs =~ s/\s+$//;
+
+    print ":::::\n";
+    print $lhs;
+    print $rhs;
+    print ":::::\n";
+    return 2;
+    
+}
+
 sub convertLang {
     my (@sourceLines) = @_;
     my @finalLang;
@@ -18,8 +34,15 @@ sub convertLang {
         if($sourceLine =~ /^.*?\(.*?\);$/) {
             push(@finalLang, $sourceLine);
         }
+        if($sourceLine eq "{") {
+            push(@finalLang, "{");
+        }
         if($sourceLine eq "}") {
             push(@finalLang, "}");
+        }
+        if($sourceLine =~ /=/) {
+            my $lhsRhsConvertedSourceLine = lhsAndRhsConvert($sourceLine);
+            push(@finalLang, $lhsRhsConvertedSourceLine);
         }
     }
 
@@ -43,6 +66,7 @@ sub main($source) {
 my $program = '
 func main() {
     print("printing print");
+    my var = 2 + 4;
 }
 ';
 
