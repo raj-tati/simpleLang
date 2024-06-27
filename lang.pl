@@ -8,15 +8,38 @@ sub convertLineToFunctionDeclaration($sourceLine) {
     return $newstring;
 }
 
+sub looksLikeCalculator {
+    my ($rhs) = @_;
+    if($rhs =~ /\d/) {
+        return $rhs;
+    } else {
+        return 0;
+    }
+}
+
 sub lhsAndRhsConvert {
     my ($sourceLine) = @_;
     my @sourceLines = split("=", $sourceLine);
     my $lhs = $sourceLines[0];
     my $rhs = $sourceLines[1];
     $lhs =~ s/^\s+//;
+    $lhs =~ s/\s+$//;
+
+    $rhs =~ s/^\s+//;
     $rhs =~ s/\s+$//;
     
-    return $lhs . "=" . $rhs;
+    if($lhs =~ /my/) {
+        my ($syntax, $variable) = split(" ", $lhs);
+        $lhs = "my " . '$' . $variable; 
+    }
+
+    if(looksLikeCalculator($rhs)) {
+        return $lhs . "=" . $rhs;
+    } else {
+        return 2;
+    }
+    ## 
+    return 2;
 }
 
 sub convertLang {
